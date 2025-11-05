@@ -1,8 +1,12 @@
-class ErrorMessages:
+from enum import Enum
+
+
+class ErrorMessages(str, Enum):
     PROJECT_NOT_FOUND = 'Проект не найден.'
     DUPLICATE_NAME = 'Проект с таким именем уже существует!'
     FULL_AMOUNT_LESS_THAN_INVESTED = (
-        'Нельзя установить значение full_amount меньше уже вложенной суммы.'
+        'Нельзя установить значение full_amount '
+        'меньше уже вложенной суммы.'
     )
     PROJECT_CLOSED = 'Закрытый проект нельзя редактировать или удалять.'
     PROJECT_HAS_INVESTMENTS = 'Нельзя удалить проект с инвестициями.'
@@ -13,11 +17,12 @@ class ErrorMessages:
     UNEXPECTED_ERROR = 'Произошла непредвиденная ошибка.'
 
 
-class CommonMessages:
+class CommonMessages(str, Enum):
     APP_TITLE = 'QRKot — благотворительный фонд помощи котикам'
     APP_DESCRIPTION = (
         'Приложение для учёта целевых проектов и пожертвований. '
-        'Средства распределяются автоматически в самые ранние открытые проекты.'
+        'Средства распределяются автоматически '
+        'в самые ранние открытые проекты.'
     )
     SUCCESS_DELETE = 'Объект успешно удалён.'
     SUCCESS_UPDATE = 'Изменения успешно сохранены.'

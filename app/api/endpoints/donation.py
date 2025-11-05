@@ -13,8 +13,9 @@ from app.schemas.donation import (
 )
 from app.services.investment import invest_donation
 
-
 router = APIRouter()
+get_session = Depends(get_async_session)
+get_user = Depends(current_user)
 
 
 @router.post(
@@ -24,8 +25,8 @@ router = APIRouter()
 )
 async def create_donation(
     donation_in: DonationCreate,
-    session: AsyncSession = Depends(get_async_session),
-    user=Depends(current_user),
+    session: AsyncSession = get_session,
+    user=get_user,
 ):
     donation = await donation_crud.create(donation_in, session, user)
     await invest_donation(donation, session)
@@ -39,9 +40,7 @@ async def create_donation(
     response_model=list[DonationFullInfoDB],
     response_model_exclude_none=True,
 )
-async def get_all_donations(
-    session: AsyncSession = Depends(get_async_session),
-):
+async def get_all_donations(session: AsyncSession = get_session):
     result = await session.execute(
         select(Donation).order_by(Donation.create_date)
     )

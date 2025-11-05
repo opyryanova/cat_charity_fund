@@ -16,6 +16,7 @@ from app.schemas.charity_project import (
 from app.services.investment import invest_new_project
 
 router = APIRouter()
+get_session = Depends(get_async_session)
 
 
 @router.post(
@@ -25,7 +26,7 @@ router = APIRouter()
 )
 async def create_charity_project(
     project_in: CharityProjectCreate,
-    session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = get_session,
 ):
     existing = await charity_project_crud.get_project_by_name(
         session, project_in.name
@@ -33,7 +34,7 @@ async def create_charity_project(
     if existing:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=ErrorMessages.DUPLICATE_NAME,
+            detail=ErrorMessages.DUPLICATE_NAME.value,
         )
 
     new_project = await charity_project_crud.create(project_in, session)
@@ -49,9 +50,7 @@ async def create_charity_project(
     response_model=list[CharityProjectRead],
     response_model_exclude_none=True,
 )
-async def get_all_projects(
-    session: AsyncSession = Depends(get_async_session),
-):
+async def get_all_projects(session: AsyncSession = get_session):
     result = await session.execute(
         select(CharityProject).order_by(CharityProject.create_date)
     )
@@ -66,18 +65,19 @@ async def get_all_projects(
 async def update_charity_project(
     project_id: int,
     project_in: CharityProjectUpdate,
-    session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = get_session,
 ):
     project = await session.get(CharityProject, project_id)
     if not project:
         raise HTTPException(
-            status_code=404, detail=ErrorMessages.PROJECT_NOT_FOUND
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=ErrorMessages.PROJECT_NOT_FOUND.value,
         )
 
     if project.fully_invested:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=ErrorMessages.PROJECT_CLOSED,
+            detail=ErrorMessages.PROJECT_CLOSED.value,
         )
 
     if project_in.name:
@@ -87,14 +87,14 @@ async def update_charity_project(
         if existing and existing.id != project_id:
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail=ErrorMessages.DUPLICATE_NAME,
+                detail=ErrorMessages.DUPLICATE_NAME.value,
             )
 
     if project_in.full_amount is not None:
         if project_in.full_amount < project.invested_amount:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail=ErrorMessages.FULL_AMOUNT_LESS_THAN_INVESTED,
+                detail=ErrorMessages.FULL_AMOUNT_LESS_THAN_INVESTED.value,
             )
         if project_in.full_amount == project.invested_amount:
             project.fully_invested = True
@@ -115,18 +115,19 @@ async def update_charity_project(
 )
 async def delete_charity_project(
     project_id: int,
-    session: AsyncSession = Depends(get_async_session),
+    session: AsyncSession = get_session,
 ):
     project = await session.get(CharityProject, project_id)
     if not project:
         raise HTTPException(
-            status_code=404, detail=ErrorMessages.PROJECT_NOT_FOUND
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=ErrorMessages.PROJECT_NOT_FOUND.value,
         )
 
     if project.invested_amount > 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=ErrorMessages.PROJECT_HAS_INVESTMENTS,
+            detail=ErrorMessages.PROJECT_HAS_INVESTMENTS.value,
         )
 
     await session.delete(project)
