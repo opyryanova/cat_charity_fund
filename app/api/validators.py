@@ -1,8 +1,8 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.constants import ProjectErrors
+from app.core.constants import ErrorMessages
 from app.models.charity_project import CharityProject
 
 
@@ -15,8 +15,8 @@ async def check_project_name_unique(
     )
     if result.scalars().first():
         raise HTTPException(
-            status_code=400,
-            detail=ProjectErrors.DUPLICATE_NAME,
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=ErrorMessages.DUPLICATE_NAME.value,
         )
 
 
@@ -27,8 +27,8 @@ async def check_project_exists(
     project = await session.get(CharityProject, project_id)
     if project is None:
         raise HTTPException(
-            status_code=404,
-            detail=ProjectErrors.NOT_FOUND,
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=ErrorMessages.PROJECT_NOT_FOUND.value,
         )
     return project
 
@@ -36,8 +36,8 @@ async def check_project_exists(
 def check_project_is_open(project: CharityProject) -> None:
     if project.fully_invested:
         raise HTTPException(
-            status_code=400,
-            detail=ProjectErrors.CLOSED,
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=ErrorMessages.PROJECT_CLOSED.value,
         )
 
 
@@ -47,14 +47,14 @@ def check_full_amount_not_less_than_invested(
 ) -> None:
     if new_amount < project.invested_amount:
         raise HTTPException(
-            status_code=400,
-            detail=ProjectErrors.FULL_AMOUNT_LESS_THAN_INVESTED,
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=ErrorMessages.FULL_AMOUNT_LESS_THAN_INVESTED.value,
         )
 
 
 def check_project_has_no_investments(project: CharityProject) -> None:
     if project.invested_amount > 0:
         raise HTTPException(
-            status_code=400,
-            detail=ProjectErrors.HAS_INVESTMENTS,
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=ErrorMessages.PROJECT_HAS_INVESTMENTS.value,
         )

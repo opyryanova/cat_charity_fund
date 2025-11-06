@@ -4,6 +4,11 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.api.validators import (
+    check_project_exists,
+    check_project_is_open,
+    check_project_has_no_investments,
+)
 from app.core.constants import ErrorMessages
 from app.core.db import get_async_session
 from app.crud.charity_project import charity_project_crud
@@ -67,18 +72,8 @@ async def update_charity_project(
     project_in: CharityProjectUpdate,
     session: AsyncSession = get_session,
 ):
-    project = await session.get(CharityProject, project_id)
-    if not project:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=ErrorMessages.PROJECT_NOT_FOUND.value,
-        )
-
-    if project.fully_invested:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=ErrorMessages.PROJECT_CLOSED.value,
-        )
+    project = await check_project_exists(project_id, session)
+    check_project_is_open(project)
 
     if project_in.name:
         existing = await charity_project_crud.get_project_by_name(
@@ -117,18 +112,8 @@ async def delete_charity_project(
     project_id: int,
     session: AsyncSession = get_session,
 ):
-    project = await session.get(CharityProject, project_id)
-    if not project:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=ErrorMessages.PROJECT_NOT_FOUND.value,
-        )
-
-    if project.invested_amount > 0:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=ErrorMessages.PROJECT_HAS_INVESTMENTS.value,
-        )
+    project = await check_project_exists(project_id, session)
+    check_project_has_no_investments(project)
 
     await session.delete(project)
     await session.commit()
