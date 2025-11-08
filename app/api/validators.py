@@ -44,7 +44,7 @@ def check_project_is_open(project: CharityProject) -> None:
 def check_full_amount(new_amount: int, project: CharityProject) -> None:
     if new_amount < project.invested_amount:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail=ErrorMessages.FULL_AMOUNT_LESS_THAN_INVESTED.value,
         )
 

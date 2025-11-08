@@ -5,11 +5,13 @@ class ErrorMessages(str, Enum):
     PROJECT_NOT_FOUND = 'Проект не найден.'
     DUPLICATE_NAME = 'Проект с таким именем уже существует!'
     FULL_AMOUNT_LESS_THAN_INVESTED = (
-        'Нельзя установить значение full_amount '
+        'Нелья установить значение full_amount '
         'меньше уже вложенной суммы.'
     )
-    PROJECT_CLOSED = 'Закрытый проект нельзя редактировать или удалять.'
-    PROJECT_HAS_INVESTMENTS = 'Нельзя удалить проект с инвестициями.'
+    PROJECT_CLOSED = 'Закрытый проект нельзя редактировать!'
+    PROJECT_HAS_INVESTMENTS = (
+        'В проект были внесены средства, не подлежит удалению!'
+    )
     DONATION_NOT_FOUND = 'Пожертвование не найдено.'
     DONATION_UPDATE_FORBIDDEN = 'Редактирование пожертвований запрещено.'
     DONATION_DELETE_FORBIDDEN = 'Удаление пожертвований запрещено.'

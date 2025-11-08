@@ -5,10 +5,10 @@ from pathlib import Path
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
-from app.core.db import Base, SYNC_DATABASE_URL as DATABASE_URL
-
-
 sys.path.append(str(Path(__file__).resolve().parents[1]))
+
+from app.core.db import Base, SYNC_DATABASE_URL as DATABASE_URL  # noqa
+from app.models import *  # noqa
 
 config = context.config
 fileConfig(config.config_file_name)
@@ -31,11 +31,13 @@ def run_migrations_online():
         {"sqlalchemy.url": DATABASE_URL},
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
+        url=DATABASE_URL,
     )
     with connectable.connect() as connection:
         context.configure(
             connection=connection,
             target_metadata=target_metadata,
+            url=DATABASE_URL,
         )
         with context.begin_transaction():
             context.run_migrations()
