@@ -4,6 +4,7 @@ from fastapi_users_db_sqlalchemy import SQLAlchemyBaseUserTable
 from sqlalchemy import Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.models.donation import Donation
 from app.core.db import Base
 
 
