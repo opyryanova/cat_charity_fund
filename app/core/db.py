@@ -1,8 +1,10 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
+from app.core.config import settings
 
-DATABASE_URL = 'sqlite+aiosqlite:///./fastapi.db'
+
+DATABASE_URL = settings.database_url
 
 engine = create_async_engine(DATABASE_URL)
 async_session_maker = sessionmaker(

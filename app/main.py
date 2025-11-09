@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from app.api.endpoints import charity_project, donation
 from app.core.constants import CommonMessages
 from app.core.db import Base, engine
+from app.core.logger import logger
 from app.core.user import auth_backend, fastapi_users
 from app.schemas.user import UserCreate, UserRead, UserUpdate
 
@@ -45,5 +46,7 @@ app.include_router(
 
 @app.on_event('startup')
 async def init_models() -> None:
+    """Создание таблиц и логирование запуска приложения."""
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+    logger.info('Приложение QRKot успешно запущено')
