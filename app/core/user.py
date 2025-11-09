@@ -61,7 +61,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         request: Optional[Request] = None,
     ):
         """Логирует факт успешной регистрации пользователя."""
-        logger.info(f'Пользователь {user.email} успешно зарегистрирован')
+        logger.info('Пользователь %s успешно зарегистрирован', user.email)
 
 
 async def get_user_manager(user_db=Depends(get_user_db)):
