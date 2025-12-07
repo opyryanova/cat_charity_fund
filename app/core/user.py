@@ -9,7 +9,7 @@ from fastapi_users.exceptions import InvalidPasswordException
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
-from app.core.constants import PASSWORD_MIN_LENGTH
+from app.core.constants import PASSWORD_MIN_LENGTH, TOKEN_LIFE_CYCLE
 from app.core.db import get_async_session
 from app.core.logger import logger
 from app.models.user import User
@@ -26,7 +26,10 @@ bearer_transport = BearerTransport(tokenUrl='auth/jwt/login')
 
 
 def get_jwt_strategy() -> JWTStrategy:
-    return JWTStrategy(secret=settings.secret, lifetime_seconds=3600)
+    return JWTStrategy(
+        secret=settings.secret,
+        lifetime_seconds=TOKEN_LIFE_CYCLE,
+    )
 
 
 auth_backend = AuthenticationBackend(
