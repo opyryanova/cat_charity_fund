@@ -1,12 +1,12 @@
 from typing import Optional
 
-from pydantic import EmailStr
+from pydantic import BaseSettings, EmailStr
 
 
-class Settings:
+class Settings(BaseSettings):
     app_title: str = 'QRKot — благотворителный фонд помощи котам'
     app_description: str = (
-        'Приложение для сбора пожертвовании на нужды котиков.'
+        'Приложение для сбора пожертвований на нужды котиков.'
     )
     app_version: str = '1.0.0'
     database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
@@ -14,8 +14,6 @@ class Settings:
 
     first_superuser_email: EmailStr = 'admin@example.com'
     first_superuser_password: str = 'admin123'
-
-    email: Optional[EmailStr] = None
 
     type: Optional[str] = None
     project_id: Optional[str] = None
@@ -27,6 +25,12 @@ class Settings:
     token_uri: Optional[str] = None
     auth_provider_x509_cert_url: Optional[str] = None
     client_x509_cert_url: Optional[str] = None
+
+    email: Optional[EmailStr] = None
+
+    class Config:
+        env_file = '.env'
+        extra = 'ignore'
 
 
 settings = Settings()
