@@ -13,14 +13,16 @@ from app.services.google_api import (
     update_spreadsheets_value,
 )
 
-router = APIRouter()
+router = APIRouter(
+    prefix='/google',
+    tags=['Google'],
+)
 
 
 @router.get(
     '/',
     response_model=list[CharityProjectRead],
     dependencies=[Depends(current_superuser)],
-    tags=['Google'],
 )
 async def get_google_report(
     session: AsyncSession = Depends(get_async_session),

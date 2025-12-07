@@ -14,8 +14,6 @@ class Settings(BaseSettings):
     first_superuser_email: EmailStr = 'admin@example.com'
     first_superuser_password: str = 'admin123'
 
-    email: EmailStr | None = None
-
     type: str | None = None
     project_id: str | None = None
     private_key_id: str | None = None
@@ -27,7 +25,10 @@ class Settings(BaseSettings):
     auth_provider_x509_cert_url: str | None = None
     client_x509_cert_url: str | None = None
 
-    model_config = SettingsConfigDict(env_file='.env', extra='ignore')
+    model_config = SettingsConfigDict(
+        env_file='.env',
+        extra='ignore',
+    )
 
 
 settings = Settings()
