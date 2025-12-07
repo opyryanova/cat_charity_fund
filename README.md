@@ -69,7 +69,7 @@
    TYPE=service_account
    PROJECT_ID=your_project_id
    PRIVATE_KEY_ID=your_private_key_id
-   PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
+   PRIVATE_KEY=-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n
    CLIENT_EMAIL=your-service-account@your-project.iam.gserviceaccount.com
    CLIENT_ID=your_client_id
    AUTH_URI=https://accounts.google.com/o/oauth2/auth
