@@ -1,8 +1,10 @@
+from typing import Optional
+
 from pydantic import EmailStr
 
 
 class Settings:
-    app_title: str = 'QRKot — благотворительный фонд помощи котам'
+    app_title: str = 'QRKot — благотворителный фонд помощи котам'
     app_description: str = (
         'Приложение для сбора пожертвовании на нужды котиков.'
     )
@@ -13,18 +15,18 @@ class Settings:
     first_superuser_email: EmailStr = 'admin@example.com'
     first_superuser_password: str = 'admin123'
 
-    email: EmailStr | None = None
+    email: Optional[EmailStr] = None
 
-    type: str | None = None
-    project_id: str | None = None
-    private_key_id: str | None = None
-    private_key: str | None = None
-    client_email: str | None = None
-    client_id: str | None = None
-    auth_uri: str | None = None
-    token_uri: str | None = None
-    auth_provider_x509_cert_url: str | None = None
-    client_x509_cert_url: str | None = None
+    type: Optional[str] = None
+    project_id: Optional[str] = None
+    private_key_id: Optional[str] = None
+    private_key: Optional[str] = None
+    client_email: Optional[str] = None
+    client_id: Optional[str] = None
+    auth_uri: Optional[str] = None
+    token_uri: Optional[str] = None
+    auth_provider_x509_cert_url: Optional[str] = None
+    client_x509_cert_url: Optional[str] = None
 
 
 settings = Settings()
