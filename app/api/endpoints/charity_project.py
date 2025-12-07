@@ -90,7 +90,7 @@ async def update_charity_project(
         if project_in.full_amount == project.invested_amount:
             project.fully_invested = True
             project.close_date = datetime.utcnow()
-    for field, value in project_in.model_dump(exclude_unset=True).items():
+    for field, value in project_in.dict(exclude_unset=True).items():
         setattr(project, field, value)
     await session.commit()
     await session.refresh(project)

@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, PositiveInt, constr
+from pydantic import BaseModel, Extra, PositiveInt, constr
 
 from app.core.constants import (
     PROJECT_DESC_MIN_LENGTH,
@@ -20,7 +20,8 @@ class CharityProjectBase(BaseModel):
 
 
 class CharityProjectCreate(CharityProjectBase):
-    model_config = ConfigDict(extra='forbid')
+    class Config:
+        extra = Extra.forbid
 
 
 class CharityProjectUpdate(BaseModel):
@@ -33,7 +34,8 @@ class CharityProjectUpdate(BaseModel):
     description: Optional[constr(min_length=PROJECT_DESC_MIN_LENGTH)] = None
     full_amount: Optional[PositiveInt] = None
 
-    model_config = ConfigDict(extra='forbid')
+    class Config:
+        extra = Extra.forbid
 
 
 class CharityProjectRead(CharityProjectBase):
@@ -43,8 +45,6 @@ class CharityProjectRead(CharityProjectBase):
     create_date: datetime
     close_date: Optional[datetime] = None
 
-    model_config = ConfigDict(
-        from_attributes=True,
-        extra='ignore',
-        exclude_none=True,
-    )
+    class Config:
+        orm_mode = True
+        extra = Extra.forbid

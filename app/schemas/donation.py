@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, Field, Extra
 
 
 class DonationBase(BaseModel):
@@ -10,14 +10,17 @@ class DonationBase(BaseModel):
 
 
 class DonationCreate(DonationBase):
-    pass
+    class Config:
+        extra = Extra.forbid
 
 
 class DonationDB(DonationBase):
     id: int
     create_date: datetime
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        orm_mode = True
+        extra = Extra.forbid
 
 
 class DonationFullInfoDB(DonationDB):
@@ -26,4 +29,6 @@ class DonationFullInfoDB(DonationDB):
     fully_invested: bool
     close_date: Optional[datetime] = None
 
-    model_config = ConfigDict(from_attributes=True)
+    class Config:
+        orm_mode = True
+        extra = Extra.forbid
