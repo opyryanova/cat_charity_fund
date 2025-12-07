@@ -1,9 +1,6 @@
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy import Boolean, Column, DateTime, Integer
-
-from app.core.db import Base
 
 
 class InvestableMixin:
