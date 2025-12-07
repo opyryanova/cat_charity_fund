@@ -1,11 +1,10 @@
 from pydantic import EmailStr
-from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
-class Settings(BaseSettings):
+class Settings:
     app_title: str = 'QRKot — благотворительный фонд помощи котам'
     app_description: str = (
-        'Приложение для сбора пожертвований на нужды котиков.'
+        'Приложение для сбора пожертвовании на нужды котиков.'
     )
     app_version: str = '1.0.0'
     database_url: str = 'sqlite+aiosqlite:///./fastapi.db'
@@ -13,6 +12,8 @@ class Settings(BaseSettings):
 
     first_superuser_email: EmailStr = 'admin@example.com'
     first_superuser_password: str = 'admin123'
+
+    email: EmailStr | None = None
 
     type: str | None = None
     project_id: str | None = None
@@ -24,11 +25,6 @@ class Settings(BaseSettings):
     token_uri: str | None = None
     auth_provider_x509_cert_url: str | None = None
     client_x509_cert_url: str | None = None
-
-    model_config = SettingsConfigDict(
-        env_file='.env',
-        extra='ignore',
-    )
 
 
 settings = Settings()

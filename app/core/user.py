@@ -1,4 +1,4 @@
-from typing import Annotated, Optional, Union
+from typing import Optional, Union
 
 from fastapi import Depends, Request
 from fastapi_users import BaseUserManager, FastAPIUsers, IntegerIDMixin
@@ -17,7 +17,7 @@ from app.schemas.user import UserCreate
 
 
 async def get_user_db(
-    session: Annotated[AsyncSession, Depends(get_async_session)]
+    session: AsyncSession = Depends(get_async_session),
 ):
     yield SQLAlchemyUserDatabase(session, User)
 
