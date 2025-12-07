@@ -3,6 +3,7 @@ from datetime import datetime
 from aiogoogle import Aiogoogle
 
 from app.core.config import settings
+from app.core.constants import COLUMN_COUNT, ROW_COUNT
 from app.models.charity_project import CharityProject
 
 
@@ -23,8 +24,8 @@ async def create_spreadsheets(wrapper_services: Aiogoogle) -> str:
                     'sheetId': 0,
                     'title': 'Отчет',
                     'gridProperties': {
-                        'rowCount': 100,
-                        'columnCount': 10,
+                        'rowCount': ROW_COUNT,
+                        'columnCount': COLUMN_COUNT,
                     },
                 }
             }
