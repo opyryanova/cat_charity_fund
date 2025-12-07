@@ -57,7 +57,7 @@
 
 Создайте файл `.env` в корне проекта и добавьте в него следующие параметры:
 
-   ```bash
+   ```env
    # Настройки приложения и базы
    DATABASE_URL=sqlite+aiosqlite:///./fastapi.db
    SECRET=your_secret_key
@@ -77,6 +77,7 @@
    AUTH_PROVIDER_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
    CLIENT_X509_CERT_URL=https://www.googleapis.com/robot/v1/metadata/x509/your-service-account%40your-project.iam.gserviceaccount.com
    ```
+
    Для работы отчета в Google Sheets сервисному аккаунту нужно выдать доступ к Google Диску / Таблицам согласно настройкам вашего аккаунта.
 
 
