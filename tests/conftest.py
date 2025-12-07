@@ -1,24 +1,15 @@
 import inspect
-import subprocess
-import sys
 from pathlib import Path
 
 import pytest
 import pytest_asyncio
-
-if not hasattr(__import__("typing_extensions"), "TypeAliasType"):
-    subprocess.check_call([
-        sys.executable, "-m", "pip", "install",
-        "typing_extensions>=4.8.0", "--upgrade", "--force-reinstall"
-    ])
-
-from mixer.backend.sqlalchemy import Mixer as _mixer
+from mixer.backend.sqlalchemy import Mixer
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 try:
-    from app.main import app
+    from app.main import app  # noqa
 except (NameError, ImportError) as error:
     raise AssertionError(
         'При импорте объекта приложения `app` из модуля `app.main` '
@@ -26,7 +17,7 @@ except (NameError, ImportError) as error:
     )
 
 try:
-    from app.core.db import Base, get_async_session
+    from app.core.db import Base, get_async_session  # noqa
 except (NameError, ImportError) as error:
     raise AssertionError(
         'При импорте объектов `Base, get_async_session` '
@@ -35,7 +26,7 @@ except (NameError, ImportError) as error:
     )
 
 try:
-    from app.core.user import current_superuser, current_user
+    from app.core.user import current_superuser, current_user  # noqa
 except (NameError, ImportError) as error:
     raise AssertionError(
         'При импорте объектов `current_superuser, current_user` '
@@ -44,13 +35,14 @@ except (NameError, ImportError) as error:
     )
 
 try:
-    from app.schemas.user import UserCreate
+    from app.schemas.user import UserCreate  # noqa
 except (NameError, ImportError) as error:
     raise AssertionError(
         'При импорте схемы `UserCreate` из модуля `app.schemas.user` '
         'возникло исключение:\n'
         f'{type(error).__name__}: {error}.'
     )
+
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -61,6 +53,7 @@ pytest_plugins = [
 
 SQLALCHEMY_DATABASE_URL = "sqlite+aiosqlite://"
 
+# Create async engine
 engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL,
     connect_args={"check_same_thread": False},
@@ -117,5 +110,5 @@ async def init_db():
 @pytest_asyncio.fixture
 async def mixer():
     async with AsyncTestingSessionLocal() as session:
-        mixer_instance = _mixer(session=session)
-        yield mixer_instance
+        mixer = Mixer(session=session)
+        yield mixer
