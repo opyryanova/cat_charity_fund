@@ -95,7 +95,7 @@ async def update_spreadsheets_value(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=(
-                f'Количество строк ({total_rows})'
+                f'Количество строк ({total_rows}) '
                 f'превышает лимит таблицы ({ROW_COUNT}).'
             )
         )
@@ -104,7 +104,7 @@ async def update_spreadsheets_value(
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=(
-                f'Значение COLUMN_COUNT ({COLUMN_COUNT}) должно быть'
+                f'Значение COLUMN_COUNT ({COLUMN_COUNT}) должно быть '
                 f'не меньше {MIN_GOOGLE_COLUMNS}.'
             )
         )
